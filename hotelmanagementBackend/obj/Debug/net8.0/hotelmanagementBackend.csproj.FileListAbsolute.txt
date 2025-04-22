@@ -35,9 +35,10 @@ D:\study\anothrfolder\hotelmanagement\hotelManagementBackend\hotelmanagementBack
 D:\study\anothrfolder\hotelmanagement\hotelManagementBackend\hotelmanagementBackend\hotelmanagementBackend\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.hotelmanagementBackend.props
 D:\study\anothrfolder\hotelmanagement\hotelManagementBackend\hotelmanagementBackend\hotelmanagementBackend\obj\Debug\net8.0\staticwebassets.pack.json
 D:\study\anothrfolder\hotelmanagement\hotelManagementBackend\hotelmanagementBackend\hotelmanagementBackend\obj\Debug\net8.0\scopedcss\bundle\hotelmanagementBackend.styles.css
-D:\study\anothrfolder\hotelmanagement\hotelManagementBackend\hotelmanagementBackend\hotelmanagementBackend\obj\Debug\net8.0\hotelmanagementBackend.csproj.CopyComplete
 D:\study\anothrfolder\hotelmanagement\hotelManagementBackend\hotelmanagementBackend\hotelmanagementBackend\obj\Debug\net8.0\hotelmanagementBackend.dll
 D:\study\anothrfolder\hotelmanagement\hotelManagementBackend\hotelmanagementBackend\hotelmanagementBackend\obj\Debug\net8.0\refint\hotelmanagementBackend.dll
 D:\study\anothrfolder\hotelmanagement\hotelManagementBackend\hotelmanagementBackend\hotelmanagementBackend\obj\Debug\net8.0\hotelmanagementBackend.pdb
 D:\study\anothrfolder\hotelmanagement\hotelManagementBackend\hotelmanagementBackend\hotelmanagementBackend\obj\Debug\net8.0\hotelmanagementBackend.genruntimeconfig.cache
 D:\study\anothrfolder\hotelmanagement\hotelManagementBackend\hotelmanagementBackend\hotelmanagementBackend\obj\Debug\net8.0\ref\hotelmanagementBackend.dll
+D:\study\anothrfolder\hotelmanagement\hotelManagementBackend\hotelmanagementBackend\hotelmanagementBackend\obj\Debug\net8.0\hotelmanagementBackend.sourcelink.json
+D:\study\anothrfolder\hotelmanagement\hotelManagementBackend\hotelmanagementBackend\hotelmanagementBackend\obj\Debug\net8.0\hotelman.A8D7D28C.Up2Date

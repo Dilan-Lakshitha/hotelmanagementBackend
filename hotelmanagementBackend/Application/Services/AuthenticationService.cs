@@ -14,12 +14,12 @@ public class AuthenticationService : IAuthenticationService
         return BCrypt.Net.BCrypt.HashPassword(password);
     }
 
-    public bool VerifyPassword(string password, string hashedPassword)
+    public bool VerifyPassword(string password, string hashedPassword)  
     {
         return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
     }
 
-    public string GenerateToken(User user)
+    public string GenerateTokenForAgency(Agency agency)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes("uM8hGt47yQpLwD3cN5zTfR1vXsK9Ab2J");
@@ -28,8 +28,8 @@ public class AuthenticationService : IAuthenticationService
         {
             Subject = new ClaimsIdentity(new[]
             {
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim(ClaimTypes.Name, agency.agency_name),
+                new Claim(ClaimTypes.Email, agency.agency_email)
             }),
             Expires = DateTime.UtcNow.AddHours(1),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

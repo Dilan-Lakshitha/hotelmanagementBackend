@@ -1,3 +1,4 @@
+using hotelmanagementBackend.Application.Interfaces;
 using hotelmanagementBackend.Application.Services;
 using hotelmanagementBackend.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
@@ -8,24 +9,27 @@ namespace hotelmanagementBackend.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly UserService _userService;
+        private readonly IAgencyServiceRepository _agencyService;
 
-        public AuthController(UserService userService)
+        public AuthController(IAgencyServiceRepository agencyService)
         {
-            _userService = userService;
+            _agencyService = agencyService;
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] UserRegisterRequest request)
+        public async Task<IActionResult> Register([FromBody] AgencyRegisterRequest request)
         {
-            await _userService.RegisterUserAsync(request.UserName, request.Email, request.Password);
-            return Ok("User registered successfully.");
+            if (request.Password != request.ConfirmPassword)
+                return BadRequest("Password and confirm password do not match.");
+
+            await _agencyService.RegisterAgencyAsync(request.AgencyName, request.AgencyEmail, request.Password);
+            return Ok("Agency registered successfully.");
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var token = await _userService.LoginUserAsync(request.UserName,request.Password);
+            var token = await _agencyService.LoginAgencyAsync(request.AgencyEmail, request.Password);
             return Ok(new { Token = token });
         }
     }
