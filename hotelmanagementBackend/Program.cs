@@ -17,6 +17,7 @@ builder.Services.AddScoped<IHotelRepository, HotelRepository>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IDriverService, DriverService>();
+builder.Services.AddScoped<IDriverRepository, DriverRepository>();
 builder.Services.AddScoped<IGuideService, GuideService>();
 builder.Services.AddScoped<IGuideRepository, GuideRepository>();
 builder.Services.AddScoped<IItineraryService, ItineraryService>();
@@ -53,7 +54,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowSpecificOrigin");
 
-app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

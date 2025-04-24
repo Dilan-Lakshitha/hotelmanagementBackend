@@ -16,7 +16,7 @@ namespace hotelmanagementBackend.Application.Services
 
         public Task<Driver> GetDriverByIdAsync(int driverId) => _driverRepository.GetDriverByIdAsync(driverId);
 
-        public Task AddDriverAsync(Driver driver) => _driverRepository.AddDriverAsync(driver);
+        public Task<Driver> AddDriverAsync(Driver driver) => _driverRepository.AddDriverAsync(driver);
 
         public Task UpdateDriverAsync(Driver driver) => _driverRepository.UpdateDriverAsync(driver);
 

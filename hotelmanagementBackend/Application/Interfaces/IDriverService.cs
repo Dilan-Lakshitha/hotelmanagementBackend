@@ -6,7 +6,7 @@ public interface IDriverService
 {
     Task<IEnumerable<Driver>> GetAllDriversAsync();
     Task<Driver> GetDriverByIdAsync(int driverId);
-    Task AddDriverAsync(Driver driver);
+    Task<Driver> AddDriverAsync(Driver driver);
     Task UpdateDriverAsync(Driver driver);
     Task DeleteDriverAsync(int driverId);
 }

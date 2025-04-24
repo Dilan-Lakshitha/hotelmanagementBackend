@@ -31,11 +31,11 @@ namespace hotelmanagementBackend.Controllers
             return Ok(driver);
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateDriver([FromBody] Driver driver)
         {
-            await _driverService.AddDriverAsync(driver);
-            return Ok();
+            var createdDriver = await _driverService.AddDriverAsync(driver);
+            return Ok(createdDriver);
         }
 
         [HttpPut("{id}")]
@@ -45,14 +45,17 @@ namespace hotelmanagementBackend.Controllers
                 return BadRequest("ID mismatch");
 
             await _driverService.UpdateDriverAsync(driver);
-            return Ok();
+
+            // Fetch updated driver and return
+            var updatedDriver = await _driverService.GetDriverByIdAsync(id);
+            return Ok(updatedDriver);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDriver(int id)
         {
             await _driverService.DeleteDriverAsync(id);
-            return Ok();
+            return Ok(new { id });
         }
     }
 }

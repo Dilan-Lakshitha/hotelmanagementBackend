@@ -29,7 +29,8 @@ public class AuthenticationService : IAuthenticationService
             Subject = new ClaimsIdentity(new[]
             {
                 new Claim(ClaimTypes.Name, agency.agency_name),
-                new Claim(ClaimTypes.Email, agency.agency_email)
+                new Claim(ClaimTypes.Email, agency.agency_email),
+                new Claim("agency_id", agency.agency_id.ToString())
             }),
             Expires = DateTime.UtcNow.AddHours(1),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
