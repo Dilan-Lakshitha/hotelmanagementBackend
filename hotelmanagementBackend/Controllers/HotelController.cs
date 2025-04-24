@@ -1,5 +1,6 @@
 ﻿using hotelmanagementBackend.Application.Interfaces;
 using hotelmanagementBackend.Domain.Entities;
+using hotelmanagementBackend.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace hotelmanagementBackend.Controllers
@@ -16,25 +17,28 @@ namespace hotelmanagementBackend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddHotel([FromBody] Hotel hotel)
+        public async Task<IActionResult> AddHotel([FromBody] HotelwithRateDto hotelDto)
         {
-            await _service.AddHotelWithRatesAsync(hotel);
-            return Ok(new { message = "Hotel added successfully" });
+            var result = await _service.AddHotelWithRatesAsync(hotelDto);
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateHotel(int id, [FromBody] Hotel hotel)
+        public async Task<IActionResult> UpdateHotel(int id, [FromBody] HotelwithRateDto hotelDto)
         {
-            hotel.HotelId = id;
-            await _service.UpdateHotelWithRatesAsync(hotel);
-            return Ok(new { message = "Hotel updated successfully" });
+            if (id != hotelDto.HotelId)
+                return BadRequest("Hotel ID mismatch");
+
+            var updatedHotel = await _service.UpdateHotelWithRatesAsync(hotelDto);
+            return Ok(updatedHotel);
         }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteHotel(int id)
         {
-            await _service.DeleteHotelAsync(id);
-            return Ok(new { message = "Hotel deleted successfully" });
+            var deletedId = await _service.DeleteHotelAsync(id);
+            return Ok(new { deletedId });
         }
 
         [HttpGet("{id}")]
@@ -52,6 +56,5 @@ namespace hotelmanagementBackend.Controllers
             return Ok(hotels);
         }
     }
-
 }
 

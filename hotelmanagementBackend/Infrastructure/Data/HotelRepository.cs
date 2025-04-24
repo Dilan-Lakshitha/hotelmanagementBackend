@@ -1,6 +1,8 @@
-﻿using Dapper;
+﻿using System.Data;
+using Dapper;
 using hotelmanagementBackend.Application.Interfaces;
 using hotelmanagementBackend.Domain.Entities;
+using Npgsql;
 
 namespace hotelmanagementBackend.Infrastructure.Data;
 
@@ -13,29 +15,36 @@ public class HotelRepository : IHotelRepository
         _context = context;
     }
 
-    public async Task AddHotelWithRatesAsync(Hotel hotel)
+    public async Task<Hotel> AddHotelWithRates(Hotel hotel)
     {
         var queryHotel = @"INSERT INTO hotel (agency_id, hotel_name, hotel_address, hotel_email, hotel_contactno)
-                           VALUES (@AgencyId, @HotelName, @HotelAddress, @HotelEmail, @HotelContactNo)
-                           RETURNING hotel_id";
+                       VALUES (@agency_id, @hotel_name, @hotel_address, @hotel_email, @hotel_contactno)
+                       RETURNING hotel_id";
 
-        var queryRate = @"INSERT INTO hotel_rate (hotel_id, rate_type, rate_price, start_date, end_date)
-                          VALUES (@HotelId, @RateType, @RatePrice, @StartDate, @EndDate)";
+        var queryRate = @"INSERT INTO hotel_rate (hotel_id, rate_type, rate, start_date, end_date)
+                      VALUES (@hotel_id, @rate_type, @rate, @start_date, @end_date)";
 
-        using var connection = _context.CreateConnection();
+        using var connection = (NpgsqlConnection)_context.CreateConnection();
+        if (connection.State != ConnectionState.Open)
+        {
+            await connection.OpenAsync();
+        }
+
         using var transaction = connection.BeginTransaction();
 
         try
         {
             var hotelId = await connection.ExecuteScalarAsync<int>(queryHotel, hotel, transaction);
+            hotel.hotel_id = hotelId;
 
             foreach (var rate in hotel.HotelRates)
             {
-                rate.HotelId = hotelId;
+                rate.hotel_id = hotelId;
                 await connection.ExecuteAsync(queryRate, rate, transaction);
             }
 
             transaction.Commit();
+            return hotel;
         }
         catch
         {
@@ -43,51 +52,58 @@ public class HotelRepository : IHotelRepository
             throw;
         }
     }
+
     
-    public async Task UpdateHotelWithRatesAsync(Hotel hotel)
+    public async Task<Hotel> UpdateHotelWithRatesAsync(Hotel hotel)
     {
         var updateHotel = @"UPDATE hotel SET 
-                                agency_id = @AgencyId,
-                                hotel_name = @HotelName,
-                                hotel_address = @HotelAddress,
-                                hotel_email = @HotelEmail,
-                                hotel_contactno = @HotelContactNo
-                            WHERE hotel_id = @HotelId";
+                        agency_id = @agency_id,
+                        hotel_name = @hotel_name,
+                        hotel_address = @hotel_address,
+                        hotel_email = @hotel_email,
+                        hotel_contactno = @hotel_Contactno
+                    WHERE hotel_id = @hotel_id";
 
-        var deleteOldRates = @"DELETE FROM hotel_rate WHERE hotel_id = @HotelId";
 
-        var insertRates = @"INSERT INTO hotel_rate (hotel_id, rate_type, rate_price, start_date, end_date)
-                            VALUES (@HotelId, @RateType, @RatePrice, @StartDate, @EndDate)";
+        var deleteOldRates = @"DELETE FROM hotel_rate WHERE hotel_id = @hotel_id";
 
-        using var connection = _context.CreateConnection();
+        var insertRates = @"INSERT INTO hotel_rate (hotel_id, rate_type, rate, start_date, end_date)
+                            VALUES (@hotel_id, @rate_type, @rate, @start_date, @end_date)";
+
+        using var connection = (NpgsqlConnection)_context.CreateConnection();
+        if (connection.State != ConnectionState.Open)
+        {
+            await connection.OpenAsync();
+        }
+
         using var transaction = connection.BeginTransaction();
 
-        try
-        {
+
             await connection.ExecuteAsync(updateHotel, hotel, transaction);
-            await connection.ExecuteAsync(deleteOldRates, new { hotel.HotelId }, transaction);
+                await connection.ExecuteAsync(deleteOldRates, new { HotelId = hotel.hotel_id }, transaction);
 
             foreach (var rate in hotel.HotelRates)
             {
-                rate.HotelId = hotel.HotelId;
+                rate.hotel_id = hotel.hotel_id;
                 await connection.ExecuteAsync(insertRates, rate, transaction);
             }
 
             transaction.Commit();
-        }
-        catch
-        {
-            transaction.Rollback();
-            throw;
-        }
+            return hotel;
+        
     }
 
-    public async Task DeleteHotelAsync(int hotelId)
+    public async Task<int> DeleteHotelAsync(int hotelId)
     {
         var deleteRates = @"DELETE FROM hotel_rate WHERE hotel_id = @HotelId";
         var deleteHotel = @"DELETE FROM hotel WHERE hotel_id = @HotelId";
 
-        using var connection = _context.CreateConnection();
+        using var connection = (NpgsqlConnection)_context.CreateConnection();
+        if (connection.State != ConnectionState.Open)
+        {
+            await connection.OpenAsync();
+        }
+
         using var transaction = connection.BeginTransaction();
 
         try
@@ -96,6 +112,8 @@ public class HotelRepository : IHotelRepository
             await connection.ExecuteAsync(deleteHotel, new { HotelId = hotelId }, transaction);
 
             transaction.Commit();
+
+            return hotelId;
         }
         catch
         {
@@ -109,7 +127,12 @@ public class HotelRepository : IHotelRepository
         var hotelQuery = @"SELECT * FROM hotel WHERE hotel_id = @HotelId";
         var rateQuery = @"SELECT * FROM hotel_rate WHERE hotel_id = @HotelId";
 
-        using var connection = _context.CreateConnection();
+        using var connection = (NpgsqlConnection)_context.CreateConnection();
+        if (connection.State != ConnectionState.Open)
+        {
+            await connection.OpenAsync();
+        }
+
 
         var hotel = await connection.QuerySingleOrDefaultAsync<Hotel>(hotelQuery, new { HotelId = hotelId });
 
@@ -127,14 +150,18 @@ public class HotelRepository : IHotelRepository
         var hotelQuery = @"SELECT * FROM hotel";
         var rateQuery = @"SELECT * FROM hotel_rate";
 
-        using var connection = _context.CreateConnection();
+        using var connection = (NpgsqlConnection)_context.CreateConnection();
+        if (connection.State != ConnectionState.Open)
+        {
+            await connection.OpenAsync();
+        }
 
         var hotels = (await connection.QueryAsync<Hotel>(hotelQuery)).ToList();
         var rates = await connection.QueryAsync<HotelRate>(rateQuery);
 
         foreach (var hotel in hotels)
         {
-            hotel.HotelRates = rates.Where(r => r.HotelId == hotel.HotelId).ToList();
+            hotel.HotelRates = rates.Where(r => r.hotel_id == hotel.hotel_id).ToList();
         }
 
         return hotels;

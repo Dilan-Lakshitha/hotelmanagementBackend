@@ -1,12 +1,13 @@
 ﻿using hotelmanagementBackend.Domain.Entities;
+using hotelmanagementBackend.Models.DTOs;
 
 namespace hotelmanagementBackend.Application.Interfaces;
 
 public interface IHotelService
 {
-    Task AddHotelWithRatesAsync(Hotel hotel);
-    Task UpdateHotelWithRatesAsync(Hotel hotel);
-    Task DeleteHotelAsync(int hotelId);
+    Task<Hotel> AddHotelWithRatesAsync(HotelwithRateDto hotel);
+    Task<Hotel> UpdateHotelWithRatesAsync(HotelwithRateDto hotel);
+    Task<int> DeleteHotelAsync(int hotelId);
     Task<Hotel> GetHotelByIdAsync(int hotelId);
     Task<IEnumerable<Hotel>> GetAllHotelsAsync();
 }

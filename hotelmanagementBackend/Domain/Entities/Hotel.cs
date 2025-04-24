@@ -2,11 +2,11 @@
 
 public class Hotel
 {
-    public int HotelId { get; set; }
-    public int AgencyId { get; set; }
-    public string HotelName { get; set; }
-    public string HotelAddress { get; set; }
-    public string HotelEmail { get; set; }
-    public string HotelContactNo { get; set; }
+    public int hotel_id { get; set; }
+    public int agency_id { get; set; }
+    public string hotel_name { get; set; }
+    public string hotel_address { get; set; }
+    public string hotel_email { get; set; }
+    public string hotel_Contactno { get; set; }
     public List<HotelRate> HotelRates { get; set; }
 }
