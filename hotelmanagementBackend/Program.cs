@@ -23,7 +23,6 @@ builder.Services.AddScoped<IGuideRepository, GuideRepository>();
 builder.Services.AddScoped<IItineraryService, ItineraryService>();
 builder.Services.AddScoped<IItineraryRepository, ItineraryRepository>();
 builder.Services.AddScoped<ILocationTicketRepository, LocationTicketRepository>();
-builder.Services.AddScoped<ILocationTicketService, LocationTicketService>();
 builder.Services.AddScoped<ITourPlanRepository, TourPlanRepository>();
 builder.Services.AddScoped<ITourPlanService, TourPlanService>();
 builder.Services.AddScoped<ITravelerRepository, TravelerRepository>();
