@@ -22,18 +22,19 @@ public class GuideService: IGuideService
         return await _guideRepository.GetGuideByIdAsync(id);
     }
 
-    public async Task AddGuideAsync(Guide guide)
+    public async Task<Guide> AddGuideAsync(Guide guide)
     {
-        await _guideRepository.AddGuideAsync(guide);
+        return await _guideRepository.AddGuideAsync(guide);
     }
 
-    public async Task UpdateGuideAsync(Guide guide)
+    public async Task<Guide> UpdateGuideAsync(Guide guide)
     {
-        await _guideRepository.UpdateGuideAsync(guide);
+        return await _guideRepository.UpdateGuideAsync(guide);
     }
 
-    public async Task DeleteGuideAsync(int id)
+    public async Task<int> DeleteGuideAsync(int id)
     {
-        await _guideRepository.DeleteGuideAsync(id);
+        return await _guideRepository.DeleteGuideAsync(id);
     }
+
 }

@@ -31,26 +31,26 @@ namespace hotelmanagementBackend.Controllers
             return Ok(guide);
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] Guide guide)
         {
-            await _guideService.AddGuideAsync(guide);
-            return Ok(new { message = "Guide added successfully" });
+            var createdGuide = await _guideService.AddGuideAsync(guide);
+            return Ok(createdGuide);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] Guide guide)
         {
             guide.GuideId = id;
-            await _guideService.UpdateGuideAsync(guide);
-            return Ok(new { message = "Guide updated successfully" });
+            var updatedGuide = await _guideService.UpdateGuideAsync(guide);
+            return Ok(updatedGuide);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _guideService.DeleteGuideAsync(id);
-            return Ok(new { message = "Guide deleted successfully" });
+            var deletedId = await _guideService.DeleteGuideAsync(id);
+            return Ok(new { deletedId });
         }
     }   
 }
