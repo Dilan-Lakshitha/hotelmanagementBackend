@@ -13,14 +13,17 @@ namespace hotelmanagementBackend.Infrastructure.Data
             _context = context;
         }
 
-        public async Task<int> AddLocationTicketAsync(LocationTicket ticket)
+        public async Task<LocationTicket> AddLocationTicketAsync(LocationTicket ticket)
         {
             var sql = @"INSERT INTO LocationTicket (location_name, description, adult_price, child_price, agency_id)
-                    VALUES (@LocationName, @Description, @AdultPrice, @ChildPrice, @AgencyId)
+                    VALUES (@location_name, @description, @adult_price, @child_price, @agency_id)
                     RETURNING location_ticket_id";
-
+            
             using var connection = _context.CreateConnection();
-            return await connection.ExecuteScalarAsync<int>(sql, ticket);
+
+            var insertedId = await connection.ExecuteScalarAsync<int>(sql, ticket);
+            ticket.location_ticket_id = insertedId;
+            return ticket;
         }
 
         public async Task<IEnumerable<LocationTicket>> GetAllTicketsAsync()
@@ -37,16 +40,18 @@ namespace hotelmanagementBackend.Infrastructure.Data
             return await connection.QuerySingleOrDefaultAsync<LocationTicket>(sql, new { Id = id });
         }
 
-        public async Task<bool> UpdateLocationTicketAsync(LocationTicket ticket)
+        public async Task UpdateLocationTicketAsync(LocationTicket ticket)
         {
-            var sql = @"UPDATE LocationTicket
-                    SET location_name = @LocationName, description = @Description,
-                        adult_price = @AdultPrice, child_price = @ChildPrice
-                    WHERE location_ticket_id = @LocationTicketId";
+            var sql = @"UPDATE LocationTicket 
+                 SET location_name = @location_name,
+                     description = @description,
+                     adult_price = @adult_price,
+                     child_price = @child_price,
+                     agency_id = @agency_id
+                 WHERE location_ticket_id = @location_ticket_id";
 
             using var connection = _context.CreateConnection();
-            var rows = await connection.ExecuteAsync(sql, ticket);
-            return rows > 0;
+            await connection.ExecuteAsync(sql, ticket);
         }
 
         public async Task<bool> DeleteLocationTicketAsync(int id)

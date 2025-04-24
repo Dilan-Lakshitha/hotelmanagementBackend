@@ -1,5 +1,6 @@
 ﻿using hotelmanagementBackend.Application.Interfaces;
 using hotelmanagementBackend.Domain.Entities;
+using hotelmanagementBackend.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace hotelmanagementBackend.Controllers
@@ -16,10 +17,10 @@ namespace hotelmanagementBackend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddTicket(LocationTicket ticket)
+        public async Task<IActionResult> AddTicket(LocationTicketDto ticket)
         {
-            var id = await _service.AddLocationTicketAsync(ticket);
-            return CreatedAtAction(nameof(GetTicketById), new { id }, ticket);
+            var ticketLocation = await _service.AddLocationTicketAsync(ticket);
+            return Ok(ticketLocation);
         }
 
         [HttpGet]
@@ -38,14 +39,13 @@ namespace hotelmanagementBackend.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTicket(int id, LocationTicket ticket)
+        public async Task<IActionResult> UpdateTicket(int id, LocationTicketDto ticket)
         {
             if (id != ticket.LocationTicketId) return BadRequest();
 
-            var updated = await _service.UpdateLocationTicketAsync(ticket);
-            if (!updated) return NotFound();
+            var updateTicket = await _service.UpdateLocationTicketAsync(ticket);
 
-            return NoContent();
+            return Ok(updateTicket);
         }
 
         [HttpDelete("{id}")]
