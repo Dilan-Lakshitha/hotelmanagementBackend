@@ -54,12 +54,22 @@ namespace hotelmanagementBackend.Infrastructure.Data
             await connection.ExecuteAsync(sql, ticket);
         }
 
-        public async Task<bool> DeleteLocationTicketAsync(int id)
+        public async Task<int> DeleteLocationTicketAsync(int id)
         {
             var sql = "DELETE FROM LocationTicket WHERE location_ticket_id = @Id";
             using var connection = _context.CreateConnection();
-            var rows = await connection.ExecuteAsync(sql, new { Id = id });
-            return rows > 0;
+            
+            var sqlCheck = "SELECT location_ticket_id FROM LocationTicket WHERE location_ticket_id = @Id";
+            var locationTicket = await connection.QuerySingleOrDefaultAsync<int>(sqlCheck, new { Id = id });
+            
+            if (locationTicket > 0)
+            {
+                var rows = await connection.ExecuteAsync(sql, new { Id = id });
+                return locationTicket; 
+            }
+
+            return -1;
         }
+
     }
 }

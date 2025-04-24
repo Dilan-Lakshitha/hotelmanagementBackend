@@ -51,10 +51,8 @@ namespace hotelmanagementBackend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTicket(int id)
         {
-            var deleted = await _service.DeleteLocationTicketAsync(id);
-            if (!deleted) return NotFound();
-
-            return NoContent();
+            var deletedId = await _service.DeleteLocationTicketAsync(id);
+            return Ok(new { deletedId });
         }
     }
 

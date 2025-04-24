@@ -8,6 +8,6 @@ namespace hotelmanagementBackend.Application.Interfaces
         Task<IEnumerable<LocationTicket>> GetAllTicketsAsync();
         Task<LocationTicket> GetTicketByIdAsync(int id);
         Task UpdateLocationTicketAsync(LocationTicket ticket);
-        Task<bool> DeleteLocationTicketAsync(int id);
+        Task<int> DeleteLocationTicketAsync(int id);
     }
 }

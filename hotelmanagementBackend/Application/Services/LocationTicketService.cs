@@ -42,7 +42,7 @@ namespace hotelmanagementBackend.Application.Services
  
             return updatedTicket;
         }
-        public Task<bool> DeleteLocationTicketAsync(int id) => _repository.DeleteLocationTicketAsync(id);
+        public Task<int> DeleteLocationTicketAsync(int id) => _repository.DeleteLocationTicketAsync(id);
     }
 
 }
