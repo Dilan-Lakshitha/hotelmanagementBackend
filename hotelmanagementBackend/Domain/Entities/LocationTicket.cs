@@ -2,10 +2,10 @@
 
 public class LocationTicket
 {
-    public int LocationTicketId { get; set; }
-    public string LocationName { get; set; }
-    public string Description { get; set; }
-    public decimal AdultPrice { get; set; }
-    public decimal ChildPrice { get; set; }
-    public int AgencyId { get; set; }
+    public int location_ticket_id { get; set; }
+    public string location_name { get; set; }
+    public string description { get; set; }
+    public decimal adult_price { get; set; }
+    public decimal child_price { get; set; }
+    public int agency_id { get; set; }
 }
