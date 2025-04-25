@@ -44,17 +44,22 @@ namespace hotelmanagementBackend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, Itinerary itinerary)
         {
-            itinerary.Id = id;
-            await _service.UpdateAsync(itinerary);
-            return Ok("Itinerary updated successfully.");
+
+            itinerary.itinerary_id = id;
+
+            var updatedItinerary = await _service.UpdateAsync(itinerary);
+
+            return Ok(updatedItinerary); 
         }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             await _service.DeleteAsync(id);
-            return Ok("Itinerary deleted successfully.");
+            return Ok(id);
         }
+
     }
 
 }

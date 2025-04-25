@@ -2,18 +2,20 @@
 
 public class Itinerary
 {
-    public int Id { get; set; }
-    public DateTime StartDate { get; set; }
-    public DateTime EndDate { get; set; }
+    public int itinerary_id { get; set; }
+    public DateTime start_date { get; set; }
+    public DateTime end_date { get; set; }
     public List<ItineraryDay> DailyPlans { get; set; }
 }
 
 public class ItineraryDay
 {
-    public int DayNumber { get; set; }
-    public DateTime Date { get; set; }
-    public string Location { get; set; }
-    public string Activities { get; set; }
-    public int HotelId { get; set; }
-    public int LocationTicketId { get; set; }
+    public int id { get; set; }
+    public int itinerary_id { get; set; }
+    public int day_number { get; set; }
+    public DateTime date { get; set; }
+    public string location { get; set; }
+    public string activities { get; set; }
+    public int hotel_id { get; set; }
+    public int location_ticket_id { get; set; }
 }

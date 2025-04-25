@@ -8,6 +8,6 @@ public interface IItineraryService
     Task<IEnumerable<Itinerary>> GetAllAsync();
     Task<Itinerary?> GetByIdAsync(int id);
     Task<Itinerary> AddAsync(ItineraryDTO itinerary);
-    Task UpdateAsync(Itinerary itinerary);
+    Task<Itinerary> UpdateAsync(Itinerary itinerary);
     Task DeleteAsync(int id);
 }

@@ -19,8 +19,16 @@ namespace hotelmanagementBackend.Application.Services
 
         public Task<Itinerary> AddAsync(ItineraryDTO itinerary) => _repository.AddAsync(itinerary);
 
-        public Task UpdateAsync(Itinerary itinerary) => _repository.UpdateAsync(itinerary);
+        public async Task<Itinerary> UpdateAsync(Itinerary itinerary)
+        {
+            await _repository.UpdateAsync(itinerary);
+            return itinerary;
+        }
+        
+        public async Task DeleteAsync(int id)
+        {
+            await _repository.DeleteAsync(id);
+        }
 
-        public Task DeleteAsync(int id) => _repository.DeleteAsync(id);
     }
 }
