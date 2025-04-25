@@ -1,4 +1,5 @@
 ﻿using hotelmanagementBackend.Domain.Entities;
+using hotelmanagementBackend.Models.DTOs;
 
 namespace hotelmanagementBackend.Application.Interfaces;
 
@@ -6,7 +7,7 @@ public interface IItineraryService
 {
     Task<IEnumerable<Itinerary>> GetAllAsync();
     Task<Itinerary?> GetByIdAsync(int id);
-    Task AddAsync(Itinerary itinerary);
+    Task<Itinerary> AddAsync(ItineraryDTO itinerary);
     Task UpdateAsync(Itinerary itinerary);
     Task DeleteAsync(int id);
 }

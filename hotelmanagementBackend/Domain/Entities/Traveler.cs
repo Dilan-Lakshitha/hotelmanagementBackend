@@ -2,14 +2,15 @@
 
 public class Traveler
 {
-    public int TravelerId { get; set; }
-    public int AgencyId { get; set; }
-    public string Name { get; set; }
-    public string Email { get; set; }
-    public string Phone { get; set; }
-    public string PassportNumber { get; set; }
-    public string Nationality { get; set; }
-    public DateTime DateOfBirth { get; set; }
-    public string TravelerType { get; set; } // solo, couple, group
-    public int? GroupId { get; set; } // Nullable if not in a group
+    public int traveler_id { get; set; }
+    public int agency_id { get; set; }
+    public string name { get; set; }
+    public string email { get; set; }
+    public string phone { get; set; }
+    public string passport_number { get; set; }
+    public string nationality { get; set; }
+    public DateTime date_of_birth { get; set; }
+    public string traveler_type { get; set; }
+    public int? group_id { get; set; }
+    public TravelerGroup? Group { get; set; } 
 }

@@ -22,12 +22,15 @@ namespace hotelmanagementBackend.Controllers
             var travelers = await _travelerService.GetAllTravelersAsync();
             return Ok(travelers);
         }
+        
         [HttpPost]
         public async Task<IActionResult> AddTraveler([FromBody] AddTravelerDto dto)
         {
-            var id = await _travelerService.AddTravelerAsync(dto);
-            return CreatedAtAction(nameof(GetTravelerById), new { travelerId = id }, new { travelerId = id });
+            var travelerId = await _travelerService.AddTravelerAsync(dto);
+            var traveler = await _travelerService.GetTravelerByIdAsync(travelerId);
+            return Ok(traveler);
         }
+
     
         [HttpGet("{travelerId}")]
         public async Task<IActionResult> GetTravelerById(int travelerId)
@@ -39,18 +42,25 @@ namespace hotelmanagementBackend.Controllers
         
     
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Traveler traveler)
+        public async Task<IActionResult> Update(int id, [FromBody] AddTravelerDto dto)
         {
-            if (id != traveler.TravelerId) return BadRequest();
-            await _travelerService.UpdateTravelerAsync(traveler);
-            return Ok();
+            await _travelerService.UpdateTravelerAsync(id, dto);
+            var updatedTraveler = await _travelerService.GetTravelerByIdAsync(id);
+            return Ok(updatedTraveler);
         }
-    
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
+            var traveler = await _travelerService.GetTravelerByIdAsync(id);
+            if (traveler == null)
+            {
+                return NotFound(new { message = $"Traveler with ID {id} not found." });
+            }
+
             await _travelerService.DeleteTravelerAsync(id);
-            return Ok();
+            return Ok(new { travelerId = id });
         }
+
     }   
 }

@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using hotelmanagementBackend.Application.Interfaces;
 using hotelmanagementBackend.Domain.Entities;
+using hotelmanagementBackend.Models.DTOs;
 
 namespace hotelmanagementBackend.Infrastructure.Data
 {
@@ -27,12 +28,38 @@ namespace hotelmanagementBackend.Infrastructure.Data
         return await connection.QueryFirstOrDefaultAsync<Itinerary>(query, new { Id = id });
     }
 
-    public async Task AddAsync(Itinerary itinerary)
+    public async Task<Itinerary> AddAsync(ItineraryDTO  itineraryDTO)
     {
-        var query = @"INSERT INTO Itinerary (tourplan_id, day_number, date, location, activities, hotel_id, location_ticket_id)
-                      VALUES (@TourPlanId, @DayNumber, @Date, @Location, @Activities, @HotelId, @LocationTicketId)";
+        var query = "INSERT INTO Itineraries (StartDate, EndDate) OUTPUT INSERTED.Id VALUES (@StartDate, @EndDate);";
         using var connection = _context.CreateConnection();
-        await connection.ExecuteAsync(query, itinerary);
+        var itineraryId = await connection.QuerySingleAsync<int>(query, new { itineraryDTO.StartDate, itineraryDTO.EndDate });
+
+        var itinerary = new Itinerary
+        {
+            Id = itineraryId,
+            StartDate = itineraryDTO.StartDate,
+            EndDate = itineraryDTO.EndDate,
+            DailyPlans = new List<ItineraryDay>()
+        };
+
+        foreach (var day in itineraryDTO.DailyPlans)
+        {
+            var dayQuery = "INSERT INTO ItineraryDays (ItineraryId, DayNumber, Date, Location, Activities, HotelId, LocationTicketId) " +
+                           "VALUES (@ItineraryId, @DayNumber, @Date, @Location, @Activities, @HotelId, @LocationTicketId);";
+
+            await connection.ExecuteAsync(dayQuery, new
+            {
+                ItineraryId = itineraryId,
+                day.DayNumber,
+                day.Date,
+                day.Location,
+                day.Activities,
+                day.HotelId,
+                day.LocationTicketId
+            });
+        }
+
+        return itinerary;
     }
 
     public async Task UpdateAsync(Itinerary itinerary)

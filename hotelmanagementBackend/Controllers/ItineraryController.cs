@@ -1,5 +1,6 @@
 ﻿using hotelmanagementBackend.Application.Interfaces;
 using hotelmanagementBackend.Domain.Entities;
+using hotelmanagementBackend.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace hotelmanagementBackend.Controllers
@@ -30,16 +31,20 @@ namespace hotelmanagementBackend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(Itinerary itinerary)
+        public async Task<IActionResult> Add(ItineraryDTO itinerary)
         {
-            await _service.AddAsync(itinerary);
-            return Ok("Itinerary added successfully.");
+            if (itinerary == null)
+            {
+                return BadRequest("Itinerary data is required.");
+            }
+            var additinerary = await _service.AddAsync(itinerary);
+            return Ok(additinerary);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, Itinerary itinerary)
         {
-            itinerary.ItineraryId = id;
+            itinerary.Id = id;
             await _service.UpdateAsync(itinerary);
             return Ok("Itinerary updated successfully.");
         }

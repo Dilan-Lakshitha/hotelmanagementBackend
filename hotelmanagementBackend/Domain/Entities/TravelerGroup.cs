@@ -2,9 +2,9 @@
 
 public class TravelerGroup
 {
-    public int GroupId { get; set; }
-    public int AgencyId { get; set; }
-    public string GroupName { get; set; }
-    public int NumberOfTravelers { get; set; }
-    public string Notes { get; set; }
+    public int group_id { get; set; }
+    public int agency_id { get; set; }
+    public int number_adult { get; set; }
+    public int number_child { get; set; }
+    public string notes { get; set; }
 }

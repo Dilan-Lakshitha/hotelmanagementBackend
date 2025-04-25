@@ -11,4 +11,6 @@ public class AddTravelerDto
     public DateTime DateOfBirth { get; set; }
     public string TravelerType { get; set; }
     public int? GroupId { get; set; }
+    
+    public TravelerGroupDto? Group { get; set; }
 }

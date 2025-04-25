@@ -34,20 +34,32 @@ public class TravelerRepository : ITravelerRepository
         using var connection = _context.CreateConnection();
         return await connection.ExecuteScalarAsync<int>(query, traveler);
     }
+    
+    public async Task<int> AddTravelerGroupAsync(TravelerGroup group)
+    {
+        var query = @"INSERT INTO public.traveler_group 
+                  (agency_id, number_adult, number_child, notes)
+                  VALUES (@AgencyId, @NumberAdult, @NumberChild, @Notes)
+                  RETURNING group_id";
+
+        using var connection = _context.CreateConnection();
+        return await connection.ExecuteScalarAsync<int>(query, group);
+    }
+
 
     public async Task UpdateTravelerAsync(Traveler traveler)
     {
         var query = @"UPDATE public.traveler SET
-                        agency_id = @AgencyId,
-                        name = @Name,
-                        email = @Email,
-                        phone = @Phone,
-                        passport_number = @PassportNumber,
-                        nationality = @Nationality,
-                        date_of_birth = @DateOfBirth,
-                        traveler_type = @TravelerType,
-                        group_id = @GroupId
-                      WHERE traveler_id = @TravelerId";
+                        agency_id = @agency_id,
+                        name = @name,
+                        email = @email,
+                        phone = @phone,
+                        passport_number = @passport_number,
+                        nationality = @nationality,
+                        date_of_birth = @date_of_birth,
+                        traveler_type = @traveler_type,
+                        group_id = @group_id
+                      WHERE traveler_id = @traveler_id";
         using var connection = _context.CreateConnection();
         await connection.ExecuteAsync(query, traveler);
     }
