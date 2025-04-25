@@ -86,54 +86,71 @@ namespace hotelmanagementBackend.Infrastructure.Data
             return itinerary;
         }
 
-        public async Task<Itinerary> UpdateAsync(Itinerary itinerary)
+        public async Task<Itinerary> UpdateAsync(ItineraryDTO itinerary)
         {
             var itineraryQuery = @"
         UPDATE Itineraries SET 
-            start_date = @start_date,
-            end_date = @end_date
-        WHERE itinerary_id = @itinerary_id";
+            start_date = @StartDate,
+            end_date = @EndDate
+        WHERE itinerary_id = @ItineraryId";
 
             using var connection = _context.CreateConnection();
             await connection.ExecuteAsync(itineraryQuery, new
             {
-                ItineraryId = itinerary.itinerary_id,
-                StartDate = itinerary.start_date,
-                EndDate = itinerary.end_date
+                ItineraryId = itinerary.ItineraryId,
+                StartDate = itinerary.StartDate,
+                EndDate = itinerary.EndDate
             });
 
             foreach (var day in itinerary.DailyPlans)
             {
                 var dayQuery = @"
-UPDATE Itinerary_days SET 
-    day_number = @day_number,
-    ""date"" = @date,
-    location = @location,
-    activities = @activities,
-    hotel_id = @hotel_id,
-    location_ticket_id = @location_ticket_id
-WHERE itinerary_id = @itinerary_id AND day_number = @day_number";
-
+            UPDATE Itinerary_days SET 
+                day_number = @DayNumber,
+                date = @Date,
+                location = @Location,
+                activities = @Activities,
+                hotel_id = @HotelId,
+                location_ticket_id = @LocationTicketId
+            WHERE itinerary_id = @ItineraryId AND day_number = @DayNumber";
 
                 await connection.ExecuteAsync(dayQuery, new
                 {
-                    itineraryId = itinerary.itinerary_id,
-                    DayNumber = day.day_number,
-                    Date = day.date,
-                    Location = day.location,
-                    Activities = day.activities,
-                    HotelId = day.hotel_id,
-                    LocationTicketId = day.location_ticket_id
+                    ItineraryId = itinerary.ItineraryId,
+                    DayNumber = day.DayNumber,
+                    Date = day.Date,
+                    Location = day.Location,
+                    Activities = day.Activities,
+                    HotelId = day.HotelId,
+                    LocationTicketId = day.LocationTicketId
                 });
             }
+            
+            var updatedItinerary = new Itinerary
+            {
+                itinerary_id = itinerary.ItineraryId ?? 0,
+                start_date = itinerary.StartDate,
+                end_date = itinerary.EndDate,
+                DailyPlans = itinerary.DailyPlans.Select(day => new ItineraryDay
+                {
+                    itinerary_id = day.ItineraryId ?? 0,
+                    day_number = day.DayNumber,
+                    date = day.Date,
+                    location = day.Location,
+                    activities = day.Activities,
+                    hotel_id = day.HotelId,
+                    location_ticket_id = day.LocationTicketId
+                }).ToList()
+            };
 
-            return itinerary;
+            return updatedItinerary;
         }
+
 
 
         public async Task DeleteAsync(int id)
         {
-            var query = "DELETE FROM Itinerary WHERE itinerary_id = @Id";
+            var query = "DELETE FROM Itineraries WHERE itinerary_id = @Id";
             using var connection = _context.CreateConnection();
             await connection.ExecuteAsync(query, new { Id = id });
         }

@@ -42,10 +42,10 @@ namespace hotelmanagementBackend.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Itinerary itinerary)
+        public async Task<IActionResult> Update(int id, ItineraryDTO itinerary)
         {
 
-            itinerary.itinerary_id = id;
+            itinerary.ItineraryId = id;
 
             var updatedItinerary = await _service.UpdateAsync(itinerary);
 

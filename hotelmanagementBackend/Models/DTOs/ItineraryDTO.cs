@@ -2,6 +2,7 @@
 
 public class ItineraryDTO
 {
+    public int? ItineraryId { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public List<ItineraryDayDTO> DailyPlans { get; set; }
@@ -9,6 +10,7 @@ public class ItineraryDTO
 
 public class ItineraryDayDTO
 {
+    public int? ItineraryId { get; set; }
     public int DayNumber { get; set; }
     public DateTime Date { get; set; }
     public string Location { get; set; }
