@@ -28,6 +28,8 @@ builder.Services.AddScoped<ITourPlanRepository, TourPlanRepository>();
 builder.Services.AddScoped<ITourPlanService, TourPlanService>();
 builder.Services.AddScoped<ITravelerRepository, TravelerRepository>();
 builder.Services.AddScoped<ITravelerService, TravelerService>();
+builder.Services.AddScoped<IBookingTourRepository , BookingTourRepository>();
+builder.Services.AddScoped<IBookingTourService, BookingTourService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

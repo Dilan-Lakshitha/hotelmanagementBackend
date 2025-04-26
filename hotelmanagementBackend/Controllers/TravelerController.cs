@@ -61,6 +61,5 @@ namespace hotelmanagementBackend.Controllers
             await _travelerService.DeleteTravelerAsync(id);
             return Ok(new { travelerId = id });
         }
-
     }   
 }

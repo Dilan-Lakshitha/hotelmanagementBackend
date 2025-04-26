@@ -30,7 +30,7 @@ public class TravelerRepository : ITravelerRepository
     {
         var query = @"INSERT INTO public.traveler 
                       (agency_id, name, email, phone, passport_number, nationality, date_of_birth, traveler_type, group_id) 
-                      VALUES (@AgencyId, @Name, @Email, @Phone, @PassportNumber, @Nationality, @DateOfBirth, @TravelerType, @GroupId)";
+                      VALUES (@agency_id, @name, @email, @phone, @passport_number, @nationality, @date_of_birth, @traveler_type, @group_id)RETURNING traveler_id";
         using var connection = _context.CreateConnection();
         return await connection.ExecuteScalarAsync<int>(query, traveler);
     }
@@ -39,13 +39,12 @@ public class TravelerRepository : ITravelerRepository
     {
         var query = @"INSERT INTO public.traveler_group 
                   (agency_id, number_adult, number_child, notes)
-                  VALUES (@AgencyId, @NumberAdult, @NumberChild, @Notes)
+                  VALUES (@agency_id, @number_adult, @number_child, @notes)
                   RETURNING group_id";
 
         using var connection = _context.CreateConnection();
         return await connection.ExecuteScalarAsync<int>(query, group);
     }
-
 
     public async Task UpdateTravelerAsync(Traveler traveler)
     {

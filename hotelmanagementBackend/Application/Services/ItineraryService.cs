@@ -42,7 +42,6 @@ namespace hotelmanagementBackend.Application.Services
 
             return itinerary;
         }
-
         
         public async Task DeleteAsync(int id)
         {
